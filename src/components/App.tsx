@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { Country } from '../types/Country'
+import React, { useState } from 'react';
+import { Country } from '../types/Country';
 import '../styles/App.css';
 
 // Static country data for display
@@ -9,7 +9,7 @@ const countries = [
   { country: 'China', population: 1439323776, deaths: 5000, recovered: 85000, lat: 35.8617, lng: 104.1954 },
 ];
 
-// Add sorting logic based on state.
+// Sorting logic for the table
 const sortData = (
   data: Country[],
   sortConfig: { key: keyof Country | null; direction: 'asc' | 'desc' | null }
@@ -18,8 +18,8 @@ const sortData = (
     return data; // No sorting, return original order
   }
   return [...data].sort((a, b) => {
-    const aValue = a[sortConfig.key!];
-    const bValue = b[sortConfig.key!];
+    const aValue = a[sortConfig.key];
+    const bValue = b[sortConfig.key];
 
     if (aValue < bValue) {
       return sortConfig.direction === 'asc' ? -1 : 1;
@@ -32,15 +32,14 @@ const sortData = (
 };
 
 const App: React.FC = () => {
-  const [sortConfig, setSortConfig] = useState<{ key: keyof typeof countries[0] | null; direction: 'asc' | 'desc' | null }>({
+  const [sortConfig, setSortConfig] = useState<{ key: keyof Country | null; direction: 'asc' | 'desc' | null }>({
     key: null,
     direction: null,
   });
 
-  const data = sortData(countries, sortConfig);
+  const sortedData = sortData(countries, sortConfig); // Use sorted data for rendering
 
-  // Add click handlers to table headers for sorting functionality.
-  const requestSort = (key) => {
+  const requestSort = (key: keyof Country) => {
     setSortConfig((prevConfig) => {
       if (prevConfig.key === key) {
         const nextDirection = prevConfig.direction === 'asc' ? 'desc' : prevConfig.direction === 'desc' ? null : 'asc';
@@ -75,7 +74,7 @@ const App: React.FC = () => {
         </tr>
       </thead>
       <tbody>
-        {countries.map((country, index) => (
+        {sortedData.map((country, index) => (
           <tr key={index}>
             <td>{country.country}</td>
             <td>{country.population}</td>
