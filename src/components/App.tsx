@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import { Country } from '../types/Country';
+import countries from '../constants/countries'
 import '../styles/App.css';
-
-// Static country data for display
-const countries = [
-  { country: 'USA', population: 331002651, deaths: 600000, recovered: 2500000, lat: 37.0902, lng: -95.7129 },
-  { country: 'India', population: 1380004385, deaths: 400000, recovered: 3000000, lat: 20.5937, lng: 78.9629 },
-  { country: 'China', population: 1439323776, deaths: 5000, recovered: 85000, lat: 35.8617, lng: 104.1954 },
-];
 
 // Sorting logic for the table
 const sortData = (
@@ -17,9 +11,12 @@ const sortData = (
   if (!sortConfig.key || !sortConfig.direction) {
     return data; // No sorting, return original order
   }
+
   return [...data].sort((a, b) => {
-    const aValue = a[sortConfig.key];
-    const bValue = b[sortConfig.key];
+    const key = sortConfig.key as keyof Country; // Ensure key is not null
+
+    const aValue = a[key];
+    const bValue = b[key];
 
     if (aValue < bValue) {
       return sortConfig.direction === 'asc' ? -1 : 1;
@@ -37,7 +34,7 @@ const App: React.FC = () => {
     direction: null,
   });
 
-  const sortedData = sortData(countries, sortConfig); // Use sorted data for rendering
+  const sortedData = sortData(countries, sortConfig);
 
   const requestSort = (key: keyof Country) => {
     setSortConfig((prevConfig) => {
