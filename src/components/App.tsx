@@ -30,16 +30,39 @@ const App: React.FC = () => {
 
   const data = sortData(countries, sortConfig);
 
+  // Add click handlers to table headers for sorting functionality.
+  const requestSort = (key) => {
+    setSortConfig((prevConfig) => {
+      if (prevConfig.key === key) {
+        const nextDirection = prevConfig.direction === 'asc' ? 'desc' : prevConfig.direction === 'desc' ? null : 'asc';
+        return { key: nextDirection ? key : null, direction: nextDirection };
+      }
+      return { key, direction: 'asc' };
+    });
+  };
+
   return (
     <table>
       <thead>
         <tr>
-          <th>Country</th>
-          <th>Population</th>
-          <th>Deaths</th>
-          <th>Recovered</th>
-          <th>Lat</th>
-          <th>Lng</th>
+          <th onClick={() => requestSort('country')}>
+            Country {sortConfig.key === 'country' ? (sortConfig.direction === 'asc' ? '⬆' : sortConfig.direction === 'desc' ? '⬇' : '') : ''}
+          </th>
+          <th onClick={() => requestSort('population')}>
+            Population {sortConfig.key === 'population' ? (sortConfig.direction === 'asc' ? '⬆' : sortConfig.direction === 'desc' ? '⬇' : '') : ''}
+          </th>
+          <th onClick={() => requestSort('deaths')}>
+            Deaths {sortConfig.key === 'deaths' ? (sortConfig.direction === 'asc' ? '⬆' : sortConfig.direction === 'desc' ? '⬇' : '') : ''}
+          </th>
+          <th onClick={() => requestSort('recovered')}>
+            Recovered {sortConfig.key === 'recovered' ? (sortConfig.direction === 'asc' ? '⬆' : sortConfig.direction === 'desc' ? '⬇' : '') : ''}
+          </th>
+          <th onClick={() => requestSort('lat')}>
+            Latitude {sortConfig.key === 'lat' ? (sortConfig.direction === 'asc' ? '⬆' : sortConfig.direction === 'desc' ? '⬇' : '') : ''}
+          </th>
+          <th onClick={() => requestSort('lng')}>
+            Longitude {sortConfig.key === 'lng' ? (sortConfig.direction === 'asc' ? '⬆' : sortConfig.direction === 'desc' ? '⬇' : '') : ''}
+          </th>
         </tr>
       </thead>
       <tbody>
