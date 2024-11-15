@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import '../styles/App.css';
 
 // Static country data for display
@@ -9,6 +9,11 @@ const countries = [
 ];
 
 const App: React.FC = () => {
+  const [sortConfig, setSortConfig] = useState<{ key: keyof typeof countries[0] | null; direction: 'asc' | 'desc' | null }>({
+    key: null,
+    direction: null,
+  });
+
   return (
     <table>
       <thead>
