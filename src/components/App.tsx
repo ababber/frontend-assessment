@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { Country } from '../types/Country'
 import '../styles/App.css';
 
 // Static country data for display
@@ -9,15 +10,23 @@ const countries = [
 ];
 
 // Add sorting logic based on state.
-const sortData = (data, sortConfig) => {
-  if (!sortConfig.key || !sortConfig.direction) return data;
-
+const sortData = (
+  data: Country[],
+  sortConfig: { key: keyof Country | null; direction: 'asc' | 'desc' | null }
+): Country[] => {
+  if (!sortConfig.key || !sortConfig.direction) {
+    return data; // No sorting, return original order
+  }
   return [...data].sort((a, b) => {
-    const aValue = a[sortConfig.key];
-    const bValue = b[sortConfig.key];
+    const aValue = a[sortConfig.key!];
+    const bValue = b[sortConfig.key!];
 
-    if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
-    if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+    if (aValue < bValue) {
+      return sortConfig.direction === 'asc' ? -1 : 1;
+    }
+    if (aValue > bValue) {
+      return sortConfig.direction === 'asc' ? 1 : -1;
+    }
     return 0;
   });
 };
