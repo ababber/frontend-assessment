@@ -8,11 +8,27 @@ const countries = [
   { country: 'China', population: 1439323776, deaths: 5000, recovered: 85000, lat: 35.8617, lng: 104.1954 },
 ];
 
+// Add sorting logic based on state.
+const sortData = (data, sortConfig) => {
+  if (!sortConfig.key || !sortConfig.direction) return data;
+
+  return [...data].sort((a, b) => {
+    const aValue = a[sortConfig.key];
+    const bValue = b[sortConfig.key];
+
+    if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+    if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+    return 0;
+  });
+};
+
 const App: React.FC = () => {
   const [sortConfig, setSortConfig] = useState<{ key: keyof typeof countries[0] | null; direction: 'asc' | 'desc' | null }>({
     key: null,
     direction: null,
   });
+
+  const data = sortData(countries, sortConfig);
 
   return (
     <table>
